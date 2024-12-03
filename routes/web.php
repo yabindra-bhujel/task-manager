@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RegisterController;
 
 // Register routes
@@ -25,6 +26,10 @@ Route::middleware(['auth'])->get('/', function () {
 Route::middleware(['auth'])->get('/projects', function () {
     return view('projects.home');
 })->name('projects');
+
+
+Route::middleware(['auth'])->post('/projects/store',
+[ProjectController::class, 'store'])->name('projects.store');
 
 Route::middleware(['auth'])->get('/teams', function () {
     return view('team.home');
