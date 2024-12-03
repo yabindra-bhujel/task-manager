@@ -37,9 +37,9 @@ class RegisterController extends Controller
         }
     }
 
+    // TODO: Implement email confirmation in new user creation
     private function sendConfirmationEmail($email)
     {
-        // Send email to user
         
     }
 }
