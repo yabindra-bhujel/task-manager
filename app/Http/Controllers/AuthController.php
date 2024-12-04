@@ -43,4 +43,9 @@ class AuthController extends Controller
 
         return redirect()->route('login');
     }
+
+    public function getCurrentUserEmail()
+    {
+        return Auth::user()->email;
+    }
 }

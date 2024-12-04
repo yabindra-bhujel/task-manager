@@ -1,44 +1,31 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\RegisterController;
+use Inertia\Inertia;
 
-// Register routes
-Route::get('register', [RegisterController::class, 'showRegisterForm'])->name('register');
-Route::post('register', [RegisterController::class, 'register']);
+Route::get('/', function () {
+    return Inertia::render('Welcome', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ]);
+});
 
+Route::get('/', function () {
+    return view('index');
+});
 
-// Login routes
-Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('login', [AuthController::class, 'login']);
+Route::get('/dashboard', function () {
+    return Inertia::render('Dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-// logout path
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
-
-// protected path
-Route::middleware(['auth'])->get('/', function () {
-    return view('home.home');
-})->name('home');
-
-Route::middleware(['auth'])->get('/projects', function () {
-    return view('projects.home');
-})->name('projects');
-
-
-Route::middleware(['auth'])->post('/projects/store',
-[ProjectController::class, 'store'])->name('projects.store');
-
-Route::middleware(['auth'])->get('/teams', function () {
-    return view('team.home');
-})->name('teams');
-
-Route::middleware(['auth'])->get('/tasks', function () {
-    return view('tasks.home');
-})->name('tasks');
-
-Route::middleware(['auth'])->get('/settings', function () {
-    return view('settings.home');
-})->name('settings');
+require __DIR__.'/auth.php';

@@ -15,6 +15,25 @@ class ProjectController extends Controller
     {
         //
     }
+    /**
+     * Display a listing of the resource. by user
+     */
+    public function userProjects()
+    {
+        $currentUser = Auth::user();
+
+        // Fetch projects created by the user or associated through the pivot table
+        $projects = Project::where('created_by', $currentUser->id)
+            ->orWhereHas('users', function ($query) use ($currentUser) {
+                $query->where('user_id', $currentUser->id);
+            })
+            ->get();
+
+        return view('navigation.sidebar', compact('projects'));
+    }
+
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -55,9 +74,13 @@ class ProjectController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Project $project)
+    public function show($projectId)
     {
-        //
+        // Fetch the project by ID
+        $project = Project::findOrFail($projectId);
+
+        // Return the view with the project
+        return view('projects.show', compact('project'));
     }
 
     /**

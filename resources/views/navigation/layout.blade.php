@@ -16,7 +16,7 @@
     <div class="flex flex-1">
 
         <!-- Sidebar -->
-        <div class="w-16 text-white">
+        <div class="w-32 text-white">
             @include('navigation.sidebar')
         </div>
 
