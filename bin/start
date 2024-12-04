@@ -1,5 +1,8 @@
 #!/bin/bash -eu
 
+ROOD_DIR=$(cd $(dirname $0)/..; pwd)
+
+
 FLG_DATABASE=
 while getopts dn OPT
 do
@@ -51,7 +54,18 @@ if [ -n "$FLG_DATABASE" ]; then
     fi
 fi
 
+cd services/api
+
 cp .env.example .env
 
-php artisan serve
+php artisan serve  &
+
+
+
+cd ../client
+
+
+npm install
+
+npm start
  
