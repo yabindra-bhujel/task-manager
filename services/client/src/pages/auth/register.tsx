@@ -1,12 +1,16 @@
 import React, { useState } from "react";
+import instance from "../../config/axiosInstance";
+import { useRegister } from "../../hooks/useRegister";
+import { useNavigate } from "react-router-dom";
 
 const UserRegister = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{ email: string; password: string }>({
     email: "",
     password: "",
   });
 
-  const [error, setError] = useState(null);
+  const { registerUser, error, loading } = useRegister();
+  const navigate = useNavigate();
 
   const handleChange = (e: { target: { name: any; value: any; }; }) => {
     const { name, value } = e.target;
@@ -16,29 +20,17 @@ const UserRegister = () => {
     });
   };
 
-  const handleSubmit = async (e: { preventDefault: () => void; }) => {
-    e.preventDefault();
+ const handleSubmit = async (e: { preventDefault: () => void }) => {
+   e.preventDefault();
+     try {
+       await registerUser(formData);
+       setFormData({ email: "", password: "" });
+       navigate("/login");
+     } catch {
+     }
+   
+ };
 
-    try {
-      const response = await fetch("/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to register");
-      }
-
-      const result = await response.json();
-      // Handle success (e.g., redirect, show success message)
-      console.log(result);
-    } catch (error) {
-      setError((error as any).message);
-    }
-  };
 
   return (
     <div className="bg-gray-100 text-gray-800 flex items-center justify-center min-h-screen py-6 px-4">
@@ -94,8 +86,9 @@ const UserRegister = () => {
             <button
               type="submit"
               className="w-full px-4 py-2 mt-4 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+              disabled={loading}
             >
-              Register
+              {loading ? "Registering..." : "Register"}
             </button>
           </form>
 
