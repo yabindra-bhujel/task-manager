@@ -32,7 +32,7 @@ export const useLogin = () => {
         navigate("/");
       }
     } catch (err: any) {
-      setError("Invalid email or password. Please try again.");
+     console.log(err)
     } finally {
       setLoading(false);
       

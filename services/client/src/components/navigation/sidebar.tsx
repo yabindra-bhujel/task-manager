@@ -26,11 +26,7 @@ interface Team {
 const Sidebar: React.FC = () => {
   const location = useLocation();
   const [sidebarWidth, setSidebarWidth] = useState<string>("w-20");
-  const [projects, setProjects] = useState<Project[]>([
-    { id: 1, name: "Project 1" },
-    { id: 2, name: "Project 2" },
-    { id: 3, name: "Project 3" },
-  ]);
+  const [projects, setProjects] = useState<Project[]>([]);
 
   const [teams, setTeams] = useState<Team[]>([
     { id: 1, name: "Team 1" },
@@ -62,6 +58,30 @@ const Sidebar: React.FC = () => {
       JSON.stringify(newWidth === "w-64")
     );
   };
+
+  const handleAddProject = async () => {
+    const name = prompt("Enter Project Name");
+    if (name) {
+      try {
+        const response = await instance.post("/projects/create", { name });
+        setProjects([...projects, response.data.project]);
+      } catch (error) {
+      }
+    }
+  }
+
+  const getProjects = async () => {
+    try {
+      const response = await instance.get("/projects/list");
+      setProjects(response.data.projects);
+    } catch (error) {
+    }
+  }
+
+
+  useEffect(() => {
+    getProjects();
+  }, []);
 
   return (
     <nav
@@ -105,6 +125,8 @@ const Sidebar: React.FC = () => {
           items={projects}
           basePath="/projects"
           sidebarWidth={sidebarWidth}
+          onAdd={() => handleAddProject()}
+          onEdit={(id) => console.log(`Edit Project ${id}`)}
         />
 
         {/* Teams Section */}
@@ -114,6 +136,8 @@ const Sidebar: React.FC = () => {
           items={teams}
           basePath="/teams"
           sidebarWidth={sidebarWidth}
+          onAdd={() => console.log("Add Team")}
+          onEdit={(id) => console.log(`Edit Team ${id}`)}
         />
 
         <SidebarLink

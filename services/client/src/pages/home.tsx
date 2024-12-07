@@ -1,10 +1,11 @@
 import React from "react";
 import Layout from "../components/navigation/layout";
+import { Header } from "../components/header/Header";
 
 const Home = () => {
     return (
       <Layout>
-       <h1>Hello wolrd</h1>
+        <Header crumbs={[{ label: "Home", to: "/" }]} />
       </Layout>
     );
 }

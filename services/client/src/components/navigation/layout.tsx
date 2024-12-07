@@ -26,7 +26,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <div
         className={`flex-1 ${
           sidebarWidth === "w-20" ? "" : ""
-        } transition-all duration-300 p-6`}
+        } transition-all duration-300 p-3`}
       >
         {children}
       </div>
