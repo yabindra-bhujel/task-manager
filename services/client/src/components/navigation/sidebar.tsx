@@ -51,7 +51,6 @@ const Sidebar: React.FC = () => {
       deleteCookie("token");
       window.location.href = "/login";
     } catch (error) {
-      console.error("Logout failed:", error);
     }
   };
 
@@ -70,10 +69,10 @@ const Sidebar: React.FC = () => {
         py-6 px-4 transition-all duration-300 ease-in-out space-y-6 shadow-md border-r-2 border-gray-300`}
     >
       {/* Header Section */}
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex justify-between items-center mb-5">
         <div className="text-2xl font-semibold text-gray-700">
           {sidebarWidth !== "w-20" && (
-            <img src="/logo.png" alt="Logo" className="h-12 w-30" />
+            <img src="/logo.png" alt="Logo" className="h-10 w-30" />
           )}
         </div>
         <button
@@ -90,7 +89,7 @@ const Sidebar: React.FC = () => {
       </div>
 
       {/* Navigation Links */}
-      <div className="space-y-4">
+      <div className="space-y-5">
         <SidebarLink
           to="/"
           icon={IoMdHome}
