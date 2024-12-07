@@ -1,6 +1,5 @@
 import React from "react";
 import { IoMdNotificationsOutline } from "react-icons/io";
-
 const Topbar = () => {
   return (
     <header className="w-full h-16 flex items-center justify-between px-6 bg-white shadow-md">
