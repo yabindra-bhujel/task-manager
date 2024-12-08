@@ -24,6 +24,7 @@ const ProjectDetails = () => {
       setProject(response.data.project);
       setProjectName(response.data.project.name);
     } catch (error) {
+      // handle error if needed
     }
   };
 
@@ -42,11 +43,14 @@ const ProjectDetails = () => {
   return (
     <Layout>
       <Header crumbs={breadcrumbs} />
-      <div className="space-y-6">
+
+      <div className="space-y-6 h-[calc(100vh-90px)] overflow-y-auto">
+        {" "}
         <ProjectHeader
           handleMenuItemChange={handleMenuItemChange}
           activeMenu={activeMenu}
           breadcrumbs={breadcrumbs}
+          project={project}
         />
         <div className="bg-white shadow rounded-md">
           {activeMenu === MenuItems.Overview && <Overview project={project} />}
