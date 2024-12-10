@@ -9,15 +9,26 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
+
+    public function list(Request $request)
+    {
+        $currentUser = Auth::user();
+        $tasks = Task::where('created_by', $currentUser->id)->get();
+        return response()->json([
+            'tasks' => $tasks,
+        ], 200);
+    }
+
     public function create(Request $request)
     {
 
         $request->validate([
-            'name' => 'required|string|max:255',
+            'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after:start_date',
-            'project_id' => 'required|exists:projects,id',
+            'due_date' => 'required|date',
+            'project_id',
+            'priority' => 'required|in:low,medium,high',
+            'status' => 'required|in:pending,in_progress,completed,stopped',
         ]);
 
         $project = Project::find($request->project_id);
@@ -26,11 +37,16 @@ class TaskController extends Controller
 
         try{
             $task = new Task();
-            $task->name = $request->name;
+            $task->title = $request->title;
             $task->description = $request->description;
-            $task->start_date = $request->start_date;
-            $task->end_date = $request->end_date;
-            $task->project_id = $project->id;
+            $task->due_date = $request->due_date;
+
+            if($request->project_id !== null) {
+                $task->project_id = $project->id;
+            }
+            
+            $task->priority = $request->priority;
+            $task->status = $request->status;
             $task->created_by = Auth::id();
 
             $task->save();

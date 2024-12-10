@@ -6,7 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
 {
-    protected $fillable = ['name', 'description', 'start_date', 'due_date', 'status', 'project_id', 'assigned_to', 'team_id'];
+    protected $fillable = [
+        'title', 
+        'description', 
+        'due_date', 
+        'status', 
+        'created_by', 
+        'priority',
+        'project_id', 
+        'assigned_to', 
+        'team_id'
+    ];
 
     // Relationship: A task belongs to a project
     public function project()

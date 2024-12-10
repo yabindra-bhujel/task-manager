@@ -28,5 +28,6 @@ Route::prefix('projects')->controller(ProjectController::class)->group(function 
 
 Route::prefix('tasks')->controller(TaskController::class)->group(function () {
     Route::post('create', 'create')->name('create');
+    Route::get('list', 'list')->name('list');
 });
 
