@@ -7,6 +7,8 @@ import { ProjectHeader } from "../../components/projects/ProjectHeader";
 import instance from "../../config/axiosInstance";
 import { MenuItems } from "../../components/type/projects/enum";
 import { ProjectInterface } from "../../components/type/projects/interfaces";
+// import { Timeline } from "../../components/projects/timeline/TimeLine";
+import { Calendar } from "../../components/projects/timeline/TimeLine";
 
 const ProjectDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -56,7 +58,15 @@ const ProjectDetails = () => {
           {activeMenu === MenuItems.Overview && <Overview project={project} />}
           {activeMenu === MenuItems.List && <p>List Content</p>}
           {activeMenu === MenuItems.Board && <p>Board Content</p>}
-          {activeMenu === MenuItems.Timeline && <p>Timeline Content</p>}
+          {activeMenu === MenuItems.Timeline && (
+            <Calendar />
+            // <div className="w-full h-[calc(100vh-200px)] bg-gray-100 p-6">
+            //   {/* Scrollable Calendar */}
+            //   <div className="overflow-x-auto whitespace-nowrap">
+            //     <Calendar />
+            //   </div>
+            // </div>
+          )}
         </div>
       </div>
     </Layout>
