@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enum\TaskStatus;
 use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Http\Request;
@@ -9,16 +10,65 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
+    /**
+     * @Route("/tasks/update_status/{id}", methods={"PUT"})
+     * @param Request $request
+     * @param string $id
+     * @return JsonResponse
+     */
+    public function updateStatus(Request $request, string $id)
+    {
+        $task = Task::find($id);
 
+        if($task === null){
+            return response()->json([
+                'message' => 'Task not found.',
+            ], 404);
+        }
+
+        try{
+            if($task->status === TaskStatus::PENDING->toString()){
+                $task->status = TaskStatus::IN_PROGRESS->toString();
+            }
+            else if($task->status === TaskStatus::IN_PROGRESS->toString()){
+                $task->status = TaskStatus::COMPLETED->toString();
+            }
+            $task->save();
+            return response()->json([
+                'task' => $task,
+                'message' => 'Task status updated successfully.',
+            ], 200);
+
+        } catch(\Exception $e){
+            return response()->json([
+                'message' => 'Failed to update task status.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * @Route("/tasks/list", methods={"GET"})
+     * @param string $id
+     * @return JsonResponse
+     */
     public function list(Request $request)
     {
         $currentUser = Auth::user();
         $tasks = Task::where('created_by', $currentUser->id)->get();
+
+        // TODO: add advanced filtering
         return response()->json([
             'tasks' => $tasks,
         ], 200);
     }
 
+
+    /**
+     * @Route("/tasks/create", methods={"POST"})
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function create(Request $request)
     {
 
