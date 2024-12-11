@@ -1,34 +1,48 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import classNames from "classnames";
 
 interface SidebarLinkProps {
   to: string;
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-  isActive: boolean;
   label: string;
   sidebarWidth: string;
+  isActive: boolean;
+  isSubMenu?: boolean;
 }
 
 export const SidebarLink: React.FC<SidebarLinkProps> = ({
   to,
   icon: Icon,
-  isActive,
   label,
   sidebarWidth,
-}) => (
-  <Link
-    to={to}
-    className={`flex items-center space-x-3 p-3 rounded-md transition-all duration-200 ease-in-out ${
-      isActive
-        ? "bg-blue-600 text-white"
-        : "text-gray-600 hover:bg-gray-200 hover:text-blue-500"
-    }`}
-  >
-    <Icon className="w-6 h-6" />
-    {sidebarWidth !== "w-20" && (
-      <span className={`font-medium ${isActive ? "font-semibold" : ""}`}>
-        {label}
-      </span>
-    )}
-  </Link>
-);
+  isActive,
+  isSubMenu = false, // Default to false if not passed
+}) => {
+  return (
+    <Link
+      to={to}
+      className={classNames(
+        "flex items-center space-x-3 p-2 rounded-md transition-colors duration-200 ease-in-out",
+        {
+          // Active parent menu color (Blue)
+          "bg-blue-500 text-white hover:bg-blue-600": isActive && !isSubMenu,
+
+          // Active submenu color (Green)
+          "bg-green-600 text-white hover:bg-green-600": isActive && isSubMenu,
+
+          // Inactive state with hover for parent (Light blue)
+          "bg-transparent text-gray-700 hover:bg-blue-100 hover:text-blue-700":
+            !isActive && !isSubMenu,
+
+          // Inactive state with hover for submenu (Light green)
+          "bg-transparent text-gray-700 hover:bg-green-100 hover:text-green-700":
+            !isActive && isSubMenu,
+        }
+      )}
+    >
+      <Icon className="w-5 h-5" />
+      {sidebarWidth !== "w-20" && <span>{label}</span>}
+    </Link>
+  );
+};

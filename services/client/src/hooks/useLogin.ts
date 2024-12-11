@@ -26,13 +26,10 @@ export const useLogin = () => {
     try {
       const response = await instance.post("/login", { email, password });
       const token = response.data.authorization.token;
-
-      if (token) {
-        setCookie("token", token, 1);
-        navigate("/");
-      }
+      setCookie("token", token, 1);
+      window.location.replace("/");
     } catch (err: any) {
-      setError("Invalid email or password. Please try again.");
+     console.log(err)
     } finally {
       setLoading(false);
       

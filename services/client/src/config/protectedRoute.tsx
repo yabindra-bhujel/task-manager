@@ -3,6 +3,7 @@ import { getCookie } from "./apiToken";
 import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import instance from "./axiosInstance";
+import { useUser } from "../provider/UserContext";
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -10,24 +11,7 @@ interface ProtectedRouteProps {
 
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const token = getCookie("token");
-  const [user, setUser] = useState<any>(undefined);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await instance.get("me/");
-        if (response.status === 200) {
-          setUser(response.data);
-        }
-      } catch (error) {
-        setUser(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchUser();
-  }, []);
+  const {user, loading} = useUser();
 
   if (loading) {
     return null;

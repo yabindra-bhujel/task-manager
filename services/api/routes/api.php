@@ -1,12 +1,17 @@
-<!-- api.php -->
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\TeamController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
 
-// auth routes
+*/
+
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login')->name('login');
     Route::post('register', 'register')->name('register');
@@ -15,10 +20,15 @@ Route::controller(AuthController::class)->group(function () {
     Route::get('me', 'me')->name('me');
 });
 
-// team routes
-Route::apiResource('teams', TeamController::class);
-Route::get('teams/{team}/members', 'TeamController@members')->name('teams.members');
-Route::post('teams/{team}/members', 'TeamController@addMember')->name('teams.addMember');
-Route::delete('teams/{team}/members/{user}', 'TeamController@removeMember')->name('teams.removeMember');
-Route::get('teams/{team}/projects', 'TeamController@projects')->name('teams.projects');
+Route::prefix('projects')->controller(ProjectController::class)->group(function () {
+    Route::post('create', 'create')->name('create');
+    Route::get('list', 'list')->name('list');
+    Route::get('show/{id}', 'show')->name('show');
+});
+
+Route::prefix('tasks')->controller(TaskController::class)->group(function () {
+    Route::post('create', 'create')->name('create');
+    Route::get('list', 'list')->name('list');
+    Route::put('update_status/{id}', 'updateStatus')->name('update_status');
+});
 
